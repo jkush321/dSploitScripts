@@ -21,7 +21,7 @@ NOTE: The [dSploit][dSploit] app is not officially affiliated with me, and is al
 
 ------------------------------
 
-Subbmitting A Script
+Submitting A Script
 ==============
 See the submitting a script section at the [dSploitScripts Repo][dSploitScriptsRepo].
 
