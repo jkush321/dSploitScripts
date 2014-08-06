@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/scriptfolder"
-        android:id="@+id/button"
+        android:id="@+id/download_button"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -25,14 +25,14 @@
         android:layout_above="@+id/listView"
         android:layout_alignRight="@+id/listView"
         android:layout_alignEnd="@+id/listView"
-        android:layout_toRightOf="@+id/button" />
+        android:layout_toRightOf="@+id/download_button" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
         android:choiceMode="none"
-        android:layout_below="@+id/button"
+        android:layout_below="@+id/download_button"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         tools:listitem="@android:layout/simple_list_item_2"

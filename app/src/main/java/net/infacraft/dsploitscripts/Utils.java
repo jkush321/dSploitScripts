@@ -2,6 +2,7 @@ package net.infacraft.dsploitscripts;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,8 +48,9 @@ public class Utils {
     }
     public static void saveFile(String file, String text) throws Exception
     {
+        text = text.replaceAll("\"","\\\"");
         runCommandSU("rm -f \"" + file + "\"");
-        runCommandSU("echo \"" + text + "\" >> \"" + file + "\"");
+        runCommandSU("echo '" + text + "' >> \"" + file + "\"");
     }
     public static void saveToSD(String file, String text) throws Exception
     {
@@ -191,6 +193,61 @@ public class Utils {
         protected Void doInBackground(String... msg)
         {
             Utils.jsonToList(msg[0]);
+            return null;
+        }
+    }
+
+    public static String retrieveCode(String url)
+    {
+        Log.d(Main.TAG,"Trying to retrieve string of [" +url+ "]");
+
+        DefaultHttpClient httpClient = new DefaultHttpClient(new BasicHttpParams());
+        HttpPost httpPost = new HttpPost(url);
+//        httpPost.setHeader("Content-type", "application/json");
+        InputStream inputStream = null;
+        String result;
+        try
+        {
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            HttpEntity ent = httpResponse.getEntity();
+            inputStream=ent.getContent();
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"),8);
+            String response = "";
+            String line = null;
+            while ((line=r.readLine())!=null)
+            {
+                response+=line+"\n";
+            }
+            inputStream.close();
+            Log.d(Main.TAG,"Got: "+response);
+            return response;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        if (inputStream!=null) {try{inputStream.close();}catch(Exception e){}}
+        Log.e(Main.TAG,"Got NOTHING!");
+        return "";
+    }
+    public static void asyncDownloadScript(String uid)
+    {
+        new ScriptRetrieveTask().execute(uid);
+    }
+    public static void downloadScript(Script script)
+    {
+        asyncDownloadScript(script.getUid());
+    }
+
+    static class ScriptRetrieveTask extends AsyncTask<String, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(String... msg)
+        {
+            Script s = Script.getByUID(msg[0]);
+            String code = retrieveCode(s.getUrl());
+            saveScript(s.getUid(),code);
+            ScriptView.self.toastFromOtherThread("Downloaded to /sdcard/dsploitscripts/" + s.getUid() + ".js", Toast.LENGTH_SHORT);
             return null;
         }
     }

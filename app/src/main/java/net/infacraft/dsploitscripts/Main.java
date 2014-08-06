@@ -2,7 +2,6 @@ package net.infacraft.dsploitscripts;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class Main extends ActionBarActivity {
     public static ArrayList<HashMap<String,String>> dataList = new ArrayList<HashMap<String,String>>();
     private SimpleAdapter listAdapater;
     public static Main self;
-    public static String API_URL = "https://infacraft.net/projects/dsploitscripts/api/test.php";
+    public static String API_URL = "https://infacraft.net/projects/dsploitscripts/api";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class Main extends ActionBarActivity {
             }
         });
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.download_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Utils.saveScript("test1.js","test");
@@ -106,5 +106,23 @@ public class Main extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void toast(String msg, int duration)
+    {
+        Toast.makeText(getApplicationContext(),msg,duration);
+    }
+    public void toastFromOtherThread(String msg, int duration)
+    {
+        final String fMsg = msg;
+        final int fDuration = duration;
+        Handler handler = new Handler(getApplicationContext().getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                toast(fMsg,fDuration);
+            }
+        };
+        handler.post(runnable);
     }
 }

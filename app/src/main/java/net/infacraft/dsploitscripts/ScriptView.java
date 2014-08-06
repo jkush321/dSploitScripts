@@ -1,24 +1,31 @@
 package net.infacraft.dsploitscripts;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.infacraft.dsploitscripts.R;
 
 public class ScriptView extends ActionBarActivity {
 
     Script script;
+    public static ScriptView self;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_script_view);
+
+        self = this;
 
         Intent intent = getIntent();
         String uid = intent.getStringExtra("uid");
@@ -30,6 +37,12 @@ public class ScriptView extends ActionBarActivity {
         ((TextView) findViewById(R.id.downloads)).setText("Downloaded " + script.getDownloads() + " times.");
         ((TextView) findViewById(R.id.author)).setText(script.getAuthor());
         ((TextView) findViewById(R.id.description)).setText(script.getDescription());
+        findViewById(R.id.scriptfolder_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.downloadScript(script);
+            }
+        });
     }
 
     @Override
@@ -49,5 +62,23 @@ public class ScriptView extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void toast(String msg, int duration)
+    {
+        Toast.makeText(getApplicationContext(), msg, duration);
+    }
+    public void toastFromOtherThread(String msg, int duration)
+    {
+        final String fMsg = msg;
+        final int fDuration = duration;
+        Handler handler = new Handler(getApplicationContext().getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                toast(fMsg,fDuration);
+            }
+        };
+        handler.post(runnable);
     }
 }

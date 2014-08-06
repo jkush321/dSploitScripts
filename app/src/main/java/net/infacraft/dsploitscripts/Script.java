@@ -34,11 +34,6 @@ public class Script {
     String name;
 
     /**
-     * The proper name of the script
-     */
-    String properName;
-
-    /**
      * This is the unique identifier of the script.
      */
     String uid;
@@ -59,7 +54,6 @@ public class Script {
         this.url = url;
         this.downloads = downloads;
         this.name = name;
-        this.properName = name;
         this.uid = uid;
         this.rating = rating;
         this.description = description;
@@ -72,7 +66,6 @@ public class Script {
             this.url = jsonObject.getString("url");
             this.downloads = jsonObject.getInt("downloads");
             this.name = jsonObject.getString("name");
-            this.properName = jsonObject.getString("properName");
             this.uid = jsonObject.getString("uid");
             this.rating = jsonObject.getInt("rating");
             this.description = jsonObject.getString("description");
@@ -105,23 +98,12 @@ public class Script {
         return name;
     }
 
-    public String getProperName() {
-        return properName;
-    }
-
     public String getUid() {
         return uid;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public String getCode()
-    {
-        // TODO
-        // retrieve code from url and return here
-        return "";
     }
 
     // ------------------------------------------------------------------------------ //
