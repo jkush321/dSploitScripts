@@ -11,34 +11,47 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scriptfolder"
-        android:id="@+id/download_button"
+        android:text="@string/refresh"
+        android:id="@+id/refresh"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:onClick="refresh"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/uploadscript"
-        android:id="@+id/button3"
+        android:id="@+id/submitbutton"
         android:layout_above="@+id/listView"
         android:layout_alignRight="@+id/listView"
         android:layout_alignEnd="@+id/listView"
-        android:layout_toRightOf="@+id/download_button" />
+        android:onClick="submitScript"
+        android:layout_toRightOf="@+id/refresh" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
         android:choiceMode="none"
-        android:layout_below="@+id/download_button"
+        android:layout_below="@+id/refresh"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         tools:listitem="@android:layout/simple_list_item_2"
-        android:padding="0dp"
+        android:padding="10dp"
         android:layout_alignParentStart="false"
         android:fastScrollEnabled="true"
         android:fastScrollAlwaysVisible="true"
-        android:background="#fffcfcfc" />
+        android:background="#fffcfcfc"
+        android:stackFromBottom="false" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/adView"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-2416674845117130/8745244759"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

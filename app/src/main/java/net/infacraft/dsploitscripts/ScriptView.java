@@ -37,10 +37,16 @@ public class ScriptView extends ActionBarActivity {
         ((TextView) findViewById(R.id.downloads)).setText("Downloaded " + script.getDownloads() + " times.");
         ((TextView) findViewById(R.id.author)).setText(script.getAuthor());
         ((TextView) findViewById(R.id.description)).setText(script.getDescription());
-        findViewById(R.id.scriptfolder_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.download).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.downloadScript(script);
+            }
+        });
+        findViewById(R.id.ratebutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickRate(view);
             }
         });
     }
@@ -66,10 +72,11 @@ public class ScriptView extends ActionBarActivity {
 
     public void toast(String msg, int duration)
     {
-        Toast.makeText(getApplicationContext(), msg, duration);
+        Toast.makeText(getBaseContext(), msg, duration).show();
     }
     public void toastFromOtherThread(String msg, int duration)
     {
+        Log.d(Main.TAG,"Trying to toast: " + msg);
         final String fMsg = msg;
         final int fDuration = duration;
         Handler handler = new Handler(getApplicationContext().getMainLooper());
@@ -80,5 +87,13 @@ public class ScriptView extends ActionBarActivity {
             }
         };
         handler.post(runnable);
+    }
+
+    public void onClickRate(View v)
+    {
+        Log.d(Main.TAG, "Clicked on Rate, attempting to rate.");
+        RatingBar bar = (RatingBar) findViewById(R.id.ratingBar);
+        Utils.rateScript(script,bar.getRating());
+        toast("Rated " + bar.getRating() + " stars", Toast.LENGTH_SHORT);
     }
 }

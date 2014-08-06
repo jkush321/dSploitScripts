@@ -11,5 +11,7 @@
     <string name="title_activity_script_view">ScriptView</string>
     <string name="by">Submitted by</string>
     <string name="download">Download</string>
+    <string name="donate">Donate</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

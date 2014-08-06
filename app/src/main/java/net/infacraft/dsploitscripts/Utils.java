@@ -64,7 +64,6 @@ public class Utils {
         try {
             code.replaceAll("\"", "\\\"");
             code.replaceAll("'","\\'");
-            code=code;
             name = "dsploitscripts/"+name.toLowerCase();
             if (!name.endsWith(".js")) name+=".js";
             saveToSD(name, code);
@@ -131,6 +130,7 @@ public class Utils {
     }
     public static Script[] createScriptObjects(JSONArray scriptArray)
     {
+        Script.scriptFromUID.clear();
         Script[] scripts = new Script[scriptArray.length()];
         for (int i = 0; i < scriptArray.length(); i++)
         {
@@ -166,7 +166,7 @@ public class Utils {
             String[][] listValues = new String[scriptArray.length][2];
             for (int i = 0; i < scriptArray.length; i++)
             {
-                listValues[i][0]=scriptArray[i].getName();
+                listValues[i][0]=scriptArray[i].getName() + " by " + scriptArray[i].getAuthor();
                 Log.d(Main.TAG,"Adding to array [name]: " + scriptArray[i].getName());
                 listValues[i][1]=scriptArray[i].getUid();
                 Log.d(Main.TAG,"Adding to array [uid-]: " + scriptArray[i].getUid());
@@ -248,6 +248,28 @@ public class Utils {
             String code = retrieveCode(s.getUrl());
             saveScript(s.getUid(),code);
             ScriptView.self.toastFromOtherThread("Downloaded to /sdcard/dsploitscripts/" + s.getUid() + ".js", Toast.LENGTH_SHORT);
+            return null;
+        }
+    }
+
+    /**
+     * Rating is cleansed by the server, don't try rating 10000
+     * Rating is also limited to 1 per script per ip address
+     */
+    public static void rateScript(Script script, float rating)
+    {
+        new ScriptRateTask().execute(new Object[]{script.getUid(),new Float(rating)});
+    }
+
+    static class ScriptRateTask extends AsyncTask<Object[], Void, Void>
+    {
+        @Override
+        protected Void doInBackground(Object[]... msg)
+        {
+            Object[] obj = msg[0];
+            String uid = (String) obj[0];
+            Float rating = (Float) obj[1];
+            retrieveCode(Main.API_URL+"/rate.php?s="+uid+"&r="+(int)(rating*2));
             return null;
         }
     }

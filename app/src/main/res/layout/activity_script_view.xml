@@ -67,14 +67,24 @@
         android:layout_alignEnd="@+id/downloads"
         android:autoText="false"
         android:background="#ffffffff"
-        android:layout_above="@+id/download_button"
         android:padding="10dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/download"
-        android:id="@+id/scriptfolder_button"
+        android:id="@+id/download"
         android:layout_above="@+id/downloads"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rate"
+        android:id="@+id/ratebutton"
+        android:layout_above="@+id/description"
+        android:layout_alignRight="@+id/ratingBar"
+        android:layout_alignEnd="@+id/ratingBar"
+        android:onClick="onClickRate" />
 </RelativeLayout>

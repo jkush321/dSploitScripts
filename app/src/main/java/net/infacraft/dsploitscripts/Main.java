@@ -1,6 +1,7 @@
 package net.infacraft.dsploitscripts;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,11 +25,12 @@ public class Main extends ActionBarActivity {
 
     ListView list;
     public static final String TAG = "dSploitScripts";
-    public static String[][] dataString = {{"Chicken","Nuggets"},{"French","Toast"}};
+    public static String[][] dataString = {{"",""}};
     public static ArrayList<HashMap<String,String>> dataList = new ArrayList<HashMap<String,String>>();
     private SimpleAdapter listAdapater;
     public static Main self;
     public static String API_URL = "https://infacraft.net/projects/dsploitscripts/api";
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class Main extends ActionBarActivity {
         listAdapater = new SimpleAdapter(this, dataList, android.R.layout.two_line_list_item, new String[]{"line1","line2"}, new int[]{android.R.id.text1,android.R.id.text2});
         list.setAdapter(listAdapater);
 
-        updateList();
+        //updateList();
 
         Utils.init();
         Utils.asyncJSONToList(API_URL);
@@ -54,14 +59,10 @@ public class Main extends ActionBarActivity {
             }
         });
 
-        findViewById(R.id.download_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Utils.saveScript("test1.js","test");
-//                Utils.saveScript("test2","test2");
-//                Utils.saveScript("test3","m\nu\nl\nt\ni\nl\ni\nn\ne");
-            }
-        });
+        adView = (AdView) findViewById(R.id.adView);
+        AdRequest req = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("29960FD8E337D7EF852D963F21C72840").build();
+        adView.loadAd(req);
+
     }
 
     public void updateList()
@@ -76,6 +77,7 @@ public class Main extends ActionBarActivity {
             dataList.add(item);
         }
         listAdapater.notifyDataSetChanged();
+        toast("Refreshed list",Toast.LENGTH_SHORT);
     }
     public void updateListFromOtherThread()
     {
@@ -102,7 +104,13 @@ public class Main extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            menuAbout();
+            return true;
+        }
+        if (id == R.id.action_donate)
+        {
+            menuDonate();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -110,7 +118,7 @@ public class Main extends ActionBarActivity {
 
     public void toast(String msg, int duration)
     {
-        Toast.makeText(getApplicationContext(),msg,duration);
+        Toast.makeText(getBaseContext(),msg,duration).show();
     }
     public void toastFromOtherThread(String msg, int duration)
     {
@@ -125,4 +133,29 @@ public class Main extends ActionBarActivity {
         };
         handler.post(runnable);
     }
+
+    public void menuDonate()
+    {
+        browseToURL("http://infacraft.net/donate");
+    }
+    public void menuAbout()
+    {
+        browseToURL("https://github.com/jkush321/dSploitScripts/blob/master/README.md#dsploitscripts");
+    }
+    public void submitScript(View v)
+    {
+        browseToURL("https://github.com/InfaCraft/dSploitScriptsRepo/blob/master/README.md#submitting-a-script");
+    }
+    public void browseToURL(String url)
+    {
+        Log.d(TAG,"Browsing to url [" +url+ "]");
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+    }
+    public void refresh(View v)
+    {
+        toast("Refreshing...",Toast.LENGTH_SHORT);
+        Utils.asyncJSONToList(API_URL);
+    }
+
 }
