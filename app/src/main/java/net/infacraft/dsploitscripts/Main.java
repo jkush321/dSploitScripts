@@ -62,7 +62,6 @@ public class Main extends ActionBarActivity {
         adView = (AdView) findViewById(R.id.adView);
         AdRequest req = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice("29960FD8E337D7EF852D963F21C72840").build();
         adView.loadAd(req);
-
     }
 
     public void updateList()

@@ -48,7 +48,12 @@ public class Utils {
     }
     public static void saveFile(String file, String text) throws Exception
     {
-        text = text.replaceAll("\"","\\\"");
+//      The following line used to be
+//              text = text.replaceAll("\\\"","\\\\\"");
+//      but was changed because it didn't return the expected results.
+//      strangely, this does, replacing single backslashes with triple.
+        text = text.replaceAll("\\\\","\\\\\\\\\\\\\\\\");
+
         runCommandSU("rm -f \"" + file + "\"");
         runCommandSU("echo '" + text + "' >> \"" + file + "\"");
     }
@@ -62,8 +67,8 @@ public class Utils {
     public static void saveScript(String name, String code)
     {
         try {
-            code.replaceAll("\"", "\\\"");
-            code.replaceAll("'","\\'");
+//            code.replaceAll("\"", "\\\"");
+//            code.replaceAll("'","\\'");
             name = "dsploitscripts/"+name.toLowerCase();
             if (!name.endsWith(".js")) name+=".js";
             saveToSD(name, code);
